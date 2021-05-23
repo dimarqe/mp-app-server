@@ -45,6 +45,17 @@ class Vehicle {
         });
     }
 
+    static findByDriverID(driverID, result){
+        pool.query("select * from vehicle where driver_id = ?", driverID, (err, doc)=>{
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc[0]);
+            }
+        });
+    }
+
     static findByOwnerID(ownerID, result){
         pool.query("select * from vehicle where owner_id = ?", ownerID, (err, doc)=>{
             if (err) {
@@ -71,7 +82,6 @@ class Vehicle {
     }
 
     static delete(vehicleID, result){
-        //check to make sure that LIMIT 1 would work as a part of this query
         pool.query("delete from vehicle where vehicle_id = ? limit 1", vehicleID, (err, doc) => {
             if (err) {
                 result(err, null);

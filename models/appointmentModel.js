@@ -2,12 +2,12 @@ const pool = require('../config/dbConnection');
 
 class Appointment {
     constructor(appointment) {
-        this.appointmentID = owner.appointmentID;
-        this.schedule = owner.schedule;
-        this.origin = owner.origin;
-        this.destination = owner.destination;
-        this.studentID = owner.studentID;
-        this.driverID = owner.driverID;
+        this.appointmentID = appointment.appointmentID;
+        this.schedule = appointment.schedule;
+        this.origin = appointment.origin;
+        this.destination = appointment.destination;
+        this.studentID = appointment.studentID;
+        this.driverID = appointment.driverID;
     }
 
     static save(appointment, result){

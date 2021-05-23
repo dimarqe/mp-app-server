@@ -32,13 +32,24 @@ class Driver {
         });
     }
 
-    static findByEmail(emailAddress, result){
-        pool.query("select * from driver where emailAddress = ? limit 1", emailAddress, (err, doc)=>{
+    static updatePhoneNumber(driverID, phoneNumber, result){
+        pool.query("update driver set phone_number = ? where driver_id = ?", [phoneNumber, driverID], (err, doc)=>{
             if (err) {
                 result(err, null);
             }
             else {
-                result(null, doc[0]);
+                result(null, doc);
+            }
+        });
+    }
+
+    static updateEmailAddress(driverID, emailAddress, result){
+        pool.query("update driver set email_address = ? where driver_id = ?", [emailAddress, driverID], (err, doc)=>{
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc);
             }
         });
     }

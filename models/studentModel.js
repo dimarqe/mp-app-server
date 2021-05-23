@@ -32,6 +32,28 @@ class Student {
         });
     }
 
+    static updatePhoneNumber(studentID, phoneNumber, result){
+        pool.query("update student set phone_number = ? where student_id = ?", [phoneNumber, studentID], (err, doc)=>{
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc);
+            }
+        });
+    }
+
+    static updateEmailAddress(studentID, emailAddress, result){
+        pool.query("update student set email_address = ? where student_id = ?", [emailAddress, studentID], (err, doc)=>{
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc);
+            }
+        });
+    }
+
     static updatePassword(studentID, password, result){
         pool.query("update student set access_code = ? where student_id = ?", [password, studentID], (err, doc)=>{
             if (err) {
@@ -55,8 +77,8 @@ class Student {
         });
     }
 
-    static delete(driverID, result){
-        pool.query("delete from driver where driver_id = ? limit 1", driverID, (err, doc) => {
+    static delete(studentID, result){
+        pool.query("delete from student where student_id = ? limit 1", studentID, (err, doc) => {
             if (err) {
                 result(err, null);
             }
