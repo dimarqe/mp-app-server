@@ -9,8 +9,8 @@ class Owner {
         this.emailAddress = owner.emailAddress;
     }
 
-    static save(owner, result){
-        pool.query("insert into vehicle_owner set ?", owner, (err, doc) => {
+    save(owner, result){
+        pool.query("insert into vehicle_owner values ?", owner, (err, doc) => {
             if (err) {
                 result(err, null);
             }

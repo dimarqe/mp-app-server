@@ -12,8 +12,8 @@ class Vehicle {
         this.driverID = vehicle.driverID;
     }
 
-    static save(vehicle, result){
-        pool.query("insert into vehicle set ?", vehicle, (err, doc) => {
+    save(vehicle, result){
+        pool.query("insert into vehicle values ?", vehicle, (err, doc) => {
             if (err) {
                 result(err, null);
             }

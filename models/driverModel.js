@@ -10,8 +10,8 @@ class Driver {
         this.accessCode = driver.accessCode;     
     }
 
-    static save(driver, result){
-        pool.query("insert into driver set ?", driver, (err, doc) => {
+    save(driver, result){
+        pool.query("insert into driver values ?", driver, (err, doc) => {
             if (err) {
                 result(err, null);
             }
