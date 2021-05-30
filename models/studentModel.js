@@ -10,8 +10,10 @@ class Student {
         this.accessCode = student.accessCode;     
     }
 
-    save(result){
-        pool.query("insert into student values ?", student, (err, doc) => {
+    static save(student, result){
+        pool.query("insert into student (student_id, first_name, last_name, phone_number, email_address, access_code) values (?,?,?,?,?,?)", 
+        [student.studentID, student.firstName, student.lastName, student.phoneNumber, student.emailAddress, student.accessCode], 
+        (err, doc) => {
             if (err) {
                 result(err, null);
             }

@@ -10,7 +10,6 @@ const pool = mysql2.createPool({
     queueLimit: 0
 });
 
-
 module.exports = pool;
 
 

@@ -32,7 +32,7 @@ class Appointment {
         });
     }
 
-    static updateAppointmentSchedule(schedule, appointmentID, result){
+    static updateSchedule(schedule, appointmentID, result){
         pool.query("update appointment set sppointment_schedule = ? where appointment_id = ?", 
         [schedule, appointmentID], (err, doc)=>{
             if (err) {
@@ -44,7 +44,7 @@ class Appointment {
         });
     }
 
-    static updateAppointmentOrigin(origin, appointmentID, result){
+    static updateOrigin(origin, appointmentID, result){
         pool.query("update appointment set origin = ? where appointment_id = ?", 
         [origin, appointmentID], (err, doc)=>{
             if (err) {
@@ -56,7 +56,7 @@ class Appointment {
         });
     }
 
-    static updateAppointmentDestination(destination, appointmentID, result){
+    static updateDestination(destination, appointmentID, result){
         pool.query("update appointment set destination = ? where appointment_id = ?", 
         [destination, appointmentID], (err, doc)=>{
             if (err) {
@@ -68,7 +68,7 @@ class Appointment {
         });
     }
 
-    static updateAppointmentDriver(driverID, appointmentID, result){
+    static updateDriver(driverID, appointmentID, result){
         pool.query("update appointment set driver_id = ? where appointment_id = ?", 
         [driverID, appointmentID], (err, doc)=>{
             if (err) {
@@ -98,7 +98,7 @@ class Appointment {
     //         }
     //     });
     // }
-    
+
     static delete(appointmentID, result){
         pool.query("delete from appointment where appointment_id = ? limit 1", appointmentID, (err, doc) => {
             if (err) {

@@ -1,6 +1,5 @@
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const passwordGenerator = require('generate-password');
 
 const DriverModel = require('../models/driverModel');
@@ -11,15 +10,13 @@ const driverController = {
 
     signUp:
         async (req, res, next) => {
-            if (req.user.ID && req.user.accessLevel == "admin") {
+            if (req.user.role == "admin") {
                 //Validates data sent in request body
                 await body('firstName', 'Invalid first name, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
                 await body('lastName', 'Invalid last name, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
                 await body('emailAddress', 'Invalid email address').isEmail().trim().escape().run(req);
-                await body('telNumber', 'Invalid phone number, 15 number limit').isLength({ min: 7 }, { max: 15 }).trim().escape().run(req);
-                await body('licensePlateNumber', 'Invalid plate #, 10 character limit').isLength({ min: 1 }, { max: 10 }).trim().escape().run(req);
-                await body('vehicleCapacity', 'Invalid vehicle capacity, must be integer').isInt({ min: 1 }, { max: 127 }).trim().escape().run(req);
-  
+                await body('phoneNumber', 'Invalid phone number, 15 number limit').isLength({ min: 7 }, { max: 15 }).trim().escape().run(req);
+
                 const reqErrors = validationResult(req);
 
                 //returns error information if invalid data contained in request body
@@ -47,11 +44,9 @@ const driverController = {
                 const newDriver = new DriverModel({
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
+                    phoneNumber: req.body.phoneNumber,
                     emailAddress: req.body.emailAddress,
-                    accessCode: passwordHash,
-                    telNumber: req.body.telNumber,
-                    licensePlateNumber : req.body.licensePlateNumber,
-                    vehicleCapacity: req.body.vehicleCapacity
+                    accessCode: passwordHash
                 });
 
                 DriverModel.save(newDriver, (err, doc) => {
@@ -63,7 +58,8 @@ const driverController = {
                             "error": false,
                             "message": "Account successfully created",
                             "data": {
-                                "email": newDriver.emailAddress,
+                                "email": doc.emailAddress,
+                                "id": doc.driver_id,
                                 "password": password
                             }
                         });
@@ -73,7 +69,7 @@ const driverController = {
             else {
                 return res.status(403).json({
                     "error": true,
-                    "message": "Invalid access token",
+                    "message": "Forbidden",
                     "data": null
                 });
             }
@@ -83,8 +79,8 @@ const driverController = {
 
     getDriver:
         async (req, res, next) => {
-            if (req.user.id && req.user.role == "driver") {
-                DriverModel.findByID(req.user.ID, (err, doc) => {
+            if (req.user.role == "driver") {
+                DriverModel.findByID(req.user.id, (err, doc) => {
                     if (err) {
                         return next(err);
                     }
@@ -96,7 +92,6 @@ const driverController = {
                         });
                     }
                     else {
-                        doc.driverID = undefined;
                         doc.accessCode = undefined;
 
                         return res.status(200).json({
@@ -110,7 +105,7 @@ const driverController = {
             else {
                 return res.status(403).json({
                     "error": true,
-                    "message": "Invalid access token",
+                    "message": "Forbidden",
                     "data": null
                 });
             }
@@ -121,7 +116,7 @@ const driverController = {
 
     updatePassword:
         async (req, res, next) => {
-            if (req.user.ID && req.user.accessLevel == "driver") {
+            if (req.user.role == "driver") {
                 await body('password', 'Invalid password, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
 
                 const reqErrors = validationResult(req);
@@ -164,7 +159,7 @@ const driverController = {
             else {
                 return res.status(403).json({
                     "error": true,
-                    "message": "Invalid access token",
+                    "message": "Forbidden",
                     "data": null
                 });
             }
@@ -172,7 +167,7 @@ const driverController = {
     ,
     updatePhoneNumber:
         async (req, res, next) => {
-            if (req.user.ID && req.user.accessLevel == "driver") {
+            if (req.user.role == "driver") {
                 await body('phoneNumber', 'Invalid phone number, 15 number limit').isLength({ min: 1 }, { max: 15 }).trim().escape().run(req);
 
                 const reqErrors = validationResult(req);
@@ -185,7 +180,7 @@ const driverController = {
                     });
                 }
 
-                DriverModel.updatePhoneNumber(req.user.ID, req.body.phoneNumber, (err, doc) => {
+                DriverModel.updatePhoneNumber(req.user.id, req.body.phoneNumber, (err, doc) => {
                     if (err) {
                         return next(err);
                     }
@@ -208,7 +203,7 @@ const driverController = {
             else {
                 return res.status(403).json({
                     "error": true,
-                    "message": "Invalid access token",
+                    "message": "Forbidden",
                     "data": null
                 });
             }
@@ -216,7 +211,7 @@ const driverController = {
     ,
     updateEmailAddress:
         async (req, res, next) => {
-            if (req.user.ID && req.user.accessLevel == "driver") {
+            if (req.user.role == "driver") {
                 await body('emailAddress', 'Invalid email address').isEmail().trim().escape().run(req);
 
                 const reqErrors = validationResult(req);
@@ -229,7 +224,7 @@ const driverController = {
                     });
                 }
 
-                DriverModel.updateEmailAddress(req.user.ID, req.body.emailAddress, (err, doc) => {
+                DriverModel.updateEmailAddress(req.user.id, req.body.emailAddress, (err, doc) => {
                     if (err) {
                         return next(err);
                     }
@@ -252,19 +247,22 @@ const driverController = {
             else {
                 return res.status(403).json({
                     "error": true,
-                    "message": "Invalid access token",
+                    "message": "Forbidden",
                     "data": null
                 });
             }
         }
     ,
 
+    //PUT REQUESTS
+    //admin update requests
+
     //DELETE REQUESTS
     deleteAccount:
-        (req, res, next)=>{
-            if(req.user.ID && req.user.accessLevel == "driver"){
-                DriverModel.delete(req.user.ID, (err, doc)=>{
-                    if(err){
+        (req, res, next) => {
+            if (req.user.role == "driver") {
+                DriverModel.delete(req.user.id, (err, doc) => {
+                    if (err) {
                         return next(err);
                     }
                     else if (doc.affectedRows >= 1) {
@@ -286,7 +284,7 @@ const driverController = {
             else {
                 return res.status(403).json({
                     "error": true,
-                    "message": "Invalid access token",
+                    "message": "Forbidden",
                     "data": null
                 });
             }

@@ -16,6 +16,7 @@ router.patch('/student/phoneNumber', verifyToken, studentController.updatePhoneN
 
 router.patch('/student/emailAddress', verifyToken, studentController.updateEmailAddress);
 
+
 router.delete('/student', verifyToken, studentController.deleteAccount);
 
 module.exports = router;

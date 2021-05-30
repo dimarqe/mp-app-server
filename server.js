@@ -6,6 +6,7 @@ const express = require('express');
 const studentRoute = require('./routes/studentRoute');
 const adminRoute = require('./routes/adminRoute');
 const driverRoute = require('./routes/driverRoute');
+const ownerRoute = require('./routes/ownerRoute');
 
 //App and port initialization
 const app = express();
@@ -27,6 +28,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(studentRoute);
 app.use(adminRoute);
 app.use(driverRoute);
+app.use(ownerRoute);
 
 //middleware that catches and returns an error for all undefined routes
 app.use('*', (req, res, next) => {
