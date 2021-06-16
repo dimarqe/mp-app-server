@@ -2,18 +2,18 @@ const router = require('express').Router();
 
 const verifyToken = require('../middleware/verifyToken');
 const ownerController = require('../controllers/ownerController');
+const adminController = require('../controllers/adminController');
+
+router.post('/owner', verifyToken, ownerController.signUp);
 
 
-router.get('/owner', verifyToken, ownerController.getOwner);
+router.get('/owner/:id', verifyToken, ownerController.getOwner);
 
 
-router.post('/owner/signUp', verifyToken, ownerController.signUp);
+router.put('/owner/:id', verifyToken, ownerController.updateOwner);
 
 
-//router.put('/owner/password', verifyToken, ownerController.updatePassword);
-
-
-router.delete('/owner', verifyToken, ownerController.deleteAccount);
+router.delete('/owner/:id', verifyToken, adminController.validate, ownerController.deleteAccount);
 
 
 module.exports = router;

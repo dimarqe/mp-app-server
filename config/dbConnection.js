@@ -1,16 +1,23 @@
-const mysql2 = require('mysql2');
+const Pool = require('pg').Pool;
 
-const pool = mysql2.createPool({
+//local testing db connection
+const pool = new Pool({
+    user: process.env.DB_USER,
     host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
     database: process.env.DATABASE,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    password: process.env.PASSWORD,
+    port: 5432,
+    ssl:{
+        rejectUnauthorized: false
+    }
 });
 
+//db connection while app is hosted on heroku
+// const pool = new Pool({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: {
+//         rejectUnauthorized: false
+//     }
+// });
+
 module.exports = pool;
-
-
-

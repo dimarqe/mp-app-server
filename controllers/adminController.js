@@ -7,7 +7,7 @@ const adminController = {
     validate:
         async (req, res, next) => {
             if (req.user.role == "admin") {
-                await body('password', 'Invalid password, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
+                await body('adminPassword', 'Invalid password, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
 
                 const reqErrors = validationResult(req);
 
@@ -31,16 +31,12 @@ const adminController = {
                         });
                     }
                     else {
-                        bcrypt.compare(req.body.password, doc.access_code, (err, result) => {
+                        bcrypt.compare(req.body.adminPassword, doc.access_code, (err, result) => {
                             if (err) {
                                 return next(err);
                             }
                             else if (result == true) {
-                                return res.status(200).json({
-                                    "error": false,
-                                    "message": "User successfully verified",
-                                    "data": null
-                                });
+                                next();
                             }
                             else {
                                 return res.status(404).json({

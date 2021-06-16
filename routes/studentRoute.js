@@ -2,21 +2,25 @@ const router = require('express').Router();
 
 const verifyToken = require('../middleware/verifyToken');
 const studentController = require('../controllers/studentController');
+const adminController = require('../controllers/adminController');
 
 
-router.get('/student', verifyToken, studentController.getStudent);
+router.post('/student', verifyToken, studentController.signUp);
 
 
-router.post('/student/signUp', verifyToken, studentController.signUp);
+router.get('/student/:id', verifyToken, studentController.getStudent);
 
 
 router.patch('/student/password', verifyToken, studentController.updatePassword);
 
-router.patch('/student/phoneNumber', verifyToken, studentController.updatePhoneNumber);
+router.patch('/student/phone-number', verifyToken, studentController.updatePhoneNumber);
 
-router.patch('/student/emailAddress', verifyToken, studentController.updateEmailAddress);
+router.patch('/student/email-address', verifyToken, studentController.updateEmailAddress);
 
 
-router.delete('/student', verifyToken, studentController.deleteAccount);
+router.put('/student/:id', verifyToken, studentController.updateStudent);
+
+
+router.delete('/student/:id', verifyToken, adminController.validate, studentController.deleteAccount);
 
 module.exports = router;

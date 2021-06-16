@@ -15,7 +15,7 @@ module.exports = (req, res, next)=>{
 
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload)=>{
         if(err){
-            return res.status(403).json({
+            return res.status(401).json({
                 "error": true,
                 "message": "Invalid access token",
                 "data": null

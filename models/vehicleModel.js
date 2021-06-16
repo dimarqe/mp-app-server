@@ -12,8 +12,10 @@ class Vehicle {
         this.driverID = vehicle.driverID;
     }
 
-    save(vehicle, result){
-        pool.query("insert into vehicle values ?", vehicle, (err, doc) => {
+    static save(vehicle, result){
+        pool.query("insert into vehicle (plate_number, capacity, make, model, colour, owner_id, driver_id) values ($1, $2, $3, $4, $5, $6, $7)", 
+        [vehicle.plateNumber, vehicle.capacity, vehicle.make, vehicle.model, vehicle.colour, vehicle.ownerID, vehicle.driverID], 
+        (err, doc) => {
             if (err) {
                 result(err, null);
             }
@@ -24,52 +26,51 @@ class Vehicle {
     }
 
     static findByID(vehicleID, result){
-        pool.query("select * from vehicle where vehicle_id = ? limit 1", vehicleID, (err, doc)=>{
+        pool.query("select * from vehicle where vehicle_id = $1", [vehicleID], (err, doc)=>{
             if (err) {
                 result(err, null);
             }
             else {
-                result(null, doc[0]);
+                result(null, doc.rows[0]);
             }
         });
     }
 
     static findByPlateNumber(plateNumber, result){
-        pool.query("select * from vehicle where plate_number = ? limit 1", plateNumber, (err, doc)=>{
+        pool.query("select * from vehicle where plate_number = $1", [plateNumber], (err, doc)=>{
             if (err) {
                 result(err, null);
             }
             else {
-                result(null, doc[0]);
+                result(null, doc.rows[0]);
             }
         });
     }
 
     static findByDriverID(driverID, result){
-        pool.query("select * from vehicle where driver_id = ?", driverID, (err, doc)=>{
+        pool.query("select * from vehicle where driver_id = $1", [driverID], (err, doc)=>{
             if (err) {
                 result(err, null);
             }
             else {
-                result(null, doc[0]);
+                result(null, doc.rows);
             }
         });
     }
 
     static findByOwnerID(ownerID, result){
-        pool.query("select * from vehicle where owner_id = ?", ownerID, (err, doc)=>{
+        pool.query("select * from vehicle where owner_id = $1", [ownerID], (err, doc)=>{
             if (err) {
                 result(err, null);
             }
             else {
-                result(null, doc[0]);
+                result(null, doc.rows);
             }
         });
     }
 
     static updateVehicle(vehicle, result){
-        pool.query
-        ("update vehicle set plate_number = ?, capacity = ?, make = ?, model = ?, colour = ?, owner_id = ?, driver_id = ? where vehicle_id = ?", 
+        pool.query("update vehicle set plate_number = $1, capacity = $2, make = $3, model = $4, colour = $5, owner_id = $6, driver_id = $7 where vehicle_id = $8", 
         [vehicle.plateNumber, vehicle.capacity, vehicle.make, vehicle.model, vehicle.colour, vehicle.ownerID, vehicle.driverID, vehicle.vehicleID], 
         (err, doc)=>{
             if (err) {
@@ -82,7 +83,7 @@ class Vehicle {
     }
 
     static delete(vehicleID, result){
-        pool.query("delete from vehicle where vehicle_id = ? limit 1", vehicleID, (err, doc) => {
+        pool.query("delete from vehicle where vehicle_id = $1", [vehicleID], (err, doc) => {
             if (err) {
                 result(err, null);
             }
