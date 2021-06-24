@@ -171,7 +171,7 @@ const driverController = {
                                         });
                                     }
                                     else {
-                                        return res.status(500).json({
+                                        return res.status(400).json({
                                             "error": true,
                                             "message": "Failed to update password",
                                             "data": null
@@ -226,7 +226,7 @@ const driverController = {
                         });
                     }
                     else {
-                        return res.status(500).json({
+                        return res.status(400).json({
                             "error": true,
                             "message": "Failed to update phone number",
                             "data": null
@@ -270,7 +270,7 @@ const driverController = {
                         });
                     }
                     else {
-                        return res.status(500).json({
+                        return res.status(400).json({
                             "error": true,
                             "message": "Failed to update email address",
                             "data": null
@@ -340,7 +340,7 @@ const driverController = {
                         });
                     }
                     else {
-                        return res.status(500).json({
+                        return res.status(400).json({
                             "error": true,
                             "message": "Error updating account",
                             "data": null
@@ -388,7 +388,7 @@ const driverController = {
                         });
                     }
                     else {
-                        return res.status(500).json({
+                        return res.status(400).json({
                             "error": true,
                             "message": "Error deleting account",
                             "data": null

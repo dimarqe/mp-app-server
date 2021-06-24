@@ -41,7 +41,9 @@ const driverController = {
                         return res.status(201).json({
                             "error": false,
                             "message": "Account successfully created",
-                            "data": doc.owner_id
+                            "data": {
+                                "owner_id":doc.owner_id
+                            }
                         });
                     }
                 });
@@ -147,7 +149,7 @@ const driverController = {
                         });
                     }
                     else {
-                        return res.status(500).json({
+                        return res.status(400).json({
                             "error": true,
                             "message": "Error updating account",
                             "data": null
@@ -195,7 +197,7 @@ const driverController = {
                         });
                     }
                     else {
-                        return res.status(500).json({
+                        return res.status(400).json({
                             "error": true,
                             "message": "Error deleting account",
                             "data": null

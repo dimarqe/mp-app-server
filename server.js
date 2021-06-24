@@ -26,6 +26,7 @@ app.use(ownerRoute);
 //Base url connection route
 app.get('/', (req, res, next) => {
     return res.status(200).json({
+        "error":false,
         "message": "...Welcome",
         "data": null
     });
