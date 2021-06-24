@@ -1,6 +1,7 @@
 //Module imports
 const dotenv = require('dotenv').config({ path: './config/.env' });
 const express = require('express');
+const cors = require('cors');
 
 //Route imports
 const studentRoute = require('./routes/studentRoute');
@@ -11,22 +12,24 @@ const ownerRoute = require('./routes/ownerRoute');
 const app = express();
 const port = process.env.PORT || 3000;
 
-//Base connection route
+//express request body parser middleware
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(cors());
+
+
+app.use(studentRoute);
+app.use(driverRoute);
+app.use(ownerRoute);
+
+
+//Base url connection route
 app.get('/', (req, res, next) => {
     return res.status(200).json({
         "message": "...Welcome",
         "data": null
     });
 });
-
-//express request body parser middleware
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-
-
-app.use(studentRoute);
-app.use(driverRoute);
-app.use(ownerRoute);
 
 //middleware that catches and returns an error for all undefined routes
 app.use('*', (req, res, next) => {
