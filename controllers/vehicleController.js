@@ -1,62 +1,9 @@
 const { body, param, validationResult } = require('express-validator');
 
-const OwnerModel = require('../models/ownerModel');
+const vehicleModel = require('../models/vehicleModel');
 
-const ownerController = {
+const vehicleController = {
 
-    //POST REQUESTS
-
-    signUp:
-        async (req, res, next) => {
-            if (req.user.role == "admin") {
-                //Validates data sent in request body
-                await body('firstName', 'Invalid first name, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
-                await body('lastName', 'Invalid last name, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
-                await body('emailAddress', 'Invalid email address').isEmail().trim().escape().run(req);
-                await body('phoneNumber', 'Invalid phone number, 15 number limit').isLength({ min: 7 }, { max: 15 }).trim().escape().run(req);
-
-                const reqErrors = validationResult(req);
-
-                //returns error information if invalid data contained in request body
-                if (!reqErrors.isEmpty()) {
-                    return res.status(400).json({
-                        "error": true,
-                        "message": reqErrors.array(),
-                        "data": null
-                    });
-                }
-
-                const newOwner = new OwnerModel({
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    phoneNumber: req.body.phoneNumber,
-                    emailAddress: req.body.emailAddress
-                });
-
-                OwnerModel.save(newOwner, (err, doc) => {
-                    if (err) {
-                        return next(err);
-                    }
-                    else {
-                        return res.status(201).json({
-                            "error": false,
-                            "message": "Account successfully created",
-                            "data": {
-                                "owner_id":doc.owner_id
-                            }
-                        });
-                    }
-                });
-            }
-            else {
-                return res.status(403).json({
-                    "error": true,
-                    "message": "Forbidden",
-                    "data": null
-                });
-            }
-        }
-    ,
     //GET REQUESTS
 
     getOwner:
@@ -250,4 +197,4 @@ const ownerController = {
     ,
 }
 
-module.exports = ownerController;
+module.exports = vehicleController;
