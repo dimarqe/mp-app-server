@@ -352,7 +352,7 @@ const appointmentController = {
                     });
                 }
 
-                AppointmentModel.delete(req.params.id, (err, doc) => {
+                AppointmentModel.delete(req.params.id, req.user.id, (err, doc) => {
                     if (err) {
                         return next(err);
                     }
