@@ -13,14 +13,14 @@ class Vehicle {
     }
 
     static save(vehicle, result){
-        pool.query("insert into vehicle (plate_number, capacity, make, model, colour, owner_id, driver_id) values ($1, $2, $3, $4, $5, $6, $7)", 
+        pool.query("insert into vehicle (plate_number, capacity, make, model, colour, owner_id, driver_id) values ($1, $2, $3, $4, $5, $6, $7) returning vehicle_id", 
         [vehicle.plateNumber, vehicle.capacity, vehicle.make, vehicle.model, vehicle.colour, vehicle.ownerID, vehicle.driverID], 
         (err, doc) => {
             if (err) {
                 result(err, null);
             }
             else {
-                result(null, doc);
+                result(null, doc.rows[0]);
             }
         });
     }
@@ -48,7 +48,7 @@ class Vehicle {
     }
 
     static findByDriverID(driverID, result){
-        pool.query("select * from vehicle where driver_id = $1", [driverID], (err, doc)=>{
+        pool.query("select * from vehicle where driver_id = $1 order by vehicle_id asc", [driverID], (err, doc)=>{
             if (err) {
                 result(err, null);
             }
@@ -59,7 +59,18 @@ class Vehicle {
     }
 
     static findByOwnerID(ownerID, result){
-        pool.query("select * from vehicle where owner_id = $1", [ownerID], (err, doc)=>{
+        pool.query("select * from vehicle where owner_id = $1 order by vehicle_id asc", [ownerID], (err, doc)=>{
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc.rows);
+            }
+        });
+    }
+
+    static findAll(result){
+        pool.query("select * from vehicle order by vehicle_id asc", (err, doc)=>{
             if (err) {
                 result(err, null);
             }

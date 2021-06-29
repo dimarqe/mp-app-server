@@ -7,6 +7,7 @@ const cors = require('cors');
 const studentRoute = require('./routes/studentRoute');
 const driverRoute = require('./routes/driverRoute');
 const ownerRoute = require('./routes/ownerRoute');
+const vehicleRoute = require('./routes/vehicleRoute');
 
 //App and port initialization
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(studentRoute);
 app.use(driverRoute);
 app.use(ownerRoute);
+app.use(vehicleRoute);
 
 
 //Base url connection route
