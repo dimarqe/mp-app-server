@@ -10,6 +10,8 @@ router.post('/student', verifyToken, studentController.signUp);
 
 router.get('/student/:id', verifyToken, studentController.getStudent);
 
+router.get('/student', verifyToken, studentController.getAllStudents);
+
 
 router.patch('/student/password', verifyToken, studentController.updatePassword);
 

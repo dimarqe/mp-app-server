@@ -11,6 +11,8 @@ router.post('/driver', verifyToken, driverController.signUp);
 
 router.get('/driver/:id', verifyToken, driverController.getDriver);
 
+router.get('/driver', verifyToken, driverController.getAllDrivers);
+
 
 router.patch('/driver/password', verifyToken, driverController.updatePassword);
 

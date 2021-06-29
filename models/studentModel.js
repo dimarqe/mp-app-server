@@ -34,6 +34,17 @@ class Student {
         });
     }
 
+    static findAll(result){
+        pool.query("select * from student", (err, doc)=>{
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc.rows);
+            }
+        });
+    }
+
     static updatePhoneNumber(studentID, phoneNumber, result){
         pool.query("update student set phone_number = $1 where student_id = $2", [phoneNumber, studentID], (err, doc)=>{
             if (err) {

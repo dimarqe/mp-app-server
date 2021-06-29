@@ -116,6 +116,43 @@ const driverController = {
             });
         }
     ,
+    getAllDrivers:
+        async (req, res, next) => {
+            if (req.user.role == "admin") {
+
+                DriverModel.findAll((err, doc) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    else if (!doc || doc.length == 0) {
+                        return res.status(404).json({
+                            "error": true,
+                            "message": "Account not found",
+                            "data": null
+                        });
+                    }
+                    else {
+                        for (let i = 0; i < doc.length; i++) {
+                            doc[i].access_code = undefined;
+                        }
+
+                        return res.status(200).json({
+                            "error": false,
+                            "message": "Account successfully retrieved",
+                            "data": doc
+                        });
+                    }
+                });
+            }
+            else {
+                return res.status(403).json({
+                    "error": true,
+                    "message": "Forbidden",
+                    "data": null
+                });
+            }
+        }
+    ,
 
     //PATCH REQUESTS
 
@@ -291,7 +328,7 @@ const driverController = {
     //PUT REQUESTS
     //admin update request
     updateDriver:
-        async(req, res, next) => {
+        async (req, res, next) => {
             if (req.user.role == "admin") {
                 //Validates data sent in request body
                 await param('id', 'Invalid ID#, must be integer').isInt().trim().escape().run(req);
@@ -360,7 +397,7 @@ const driverController = {
 
     //DELETE REQUESTS
     deleteAccount:
-        async(req, res, next) => {
+        async (req, res, next) => {
             if (req.user.role == "admin") {
                 //Validates data sent in request body
                 await param('id', 'Invalid ID#, must be integer').isInt().trim().escape().run(req);

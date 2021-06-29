@@ -127,6 +127,44 @@ const studentController = {
         }
     ,
 
+    getAllStudents:
+        async (req, res, next) => {
+            if (req.user.role == "admin") {
+
+                StudentModel.findAll((err, doc) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    else if (!doc || doc.length == 0) {
+                        return res.status(404).json({
+                            "error": true,
+                            "message": "No records found",
+                            "data": null
+                        });
+                    }
+                    else {
+                        for (let i = 0; i < doc.length; i++) {
+                            doc[i].access_code = undefined;
+                        }
+
+                        return res.status(200).json({
+                            "error": false,
+                            "message": "Accounts successfully retrieved",
+                            "data": doc
+                        });
+                    }
+                });
+            }
+            else {
+                return res.status(403).json({
+                    "error": true,
+                    "message": "Forbidden",
+                    "data": null
+                });
+            }
+        }
+    ,
+
     //PATCH REQUESTS
 
     updatePassword:
@@ -308,7 +346,7 @@ const studentController = {
                 await body('lastName', 'Invalid last name, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
                 await body('emailAddress', 'Invalid email address').isEmail().trim().escape().run(req);
                 await body('phoneNumber', 'Invalid phone number, 15 number limit').isLength({ min: 7 }, { max: 15 }).trim().escape().run(req);
-                await body('password', 'Invalid password, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
+                await body('password', 'Invalid password, 30 character limit').isLength({ max: 30 }).trim().escape().run(req);
 
                 const reqErrors = validationResult(req);
 
@@ -321,11 +359,13 @@ const studentController = {
                     });
                 }
 
-                try {
-                    //hashes password new password sent in request body
-                    var passwordHash = await bcrypt.hash(req.body.password, 10);
-                } catch (error) {
-                    return next(error);
+                if (!req.body.password.isEmpty()) {
+                    try {
+                        //hashes password new password sent in request body
+                        var passwordHash = await bcrypt.hash(req.body.password, 10);
+                    } catch (error) {
+                        return next(error);
+                    }
                 }
 
                 const newStudent = new StudentModel({

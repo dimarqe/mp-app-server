@@ -35,6 +35,17 @@ class Driver {
         });
     }
 
+    static findAll(result) {
+        pool.query("select * from driver", (err, doc) => {
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc.rows);
+            }
+        });
+    }
+
     static updatePhoneNumber(driverID, phoneNumber, result) {
         pool.query("update driver set phone_number = $1 where driver_id = $2", [phoneNumber, driverID], (err, doc) => {
             if (err) {
