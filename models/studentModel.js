@@ -35,7 +35,7 @@ class Student {
     }
 
     static findAll(result){
-        pool.query("select * from student", (err, doc)=>{
+        pool.query("select * from student order by student_id asc", (err, doc)=>{
             if (err) {
                 result(err, null);
             }

@@ -9,6 +9,8 @@ router.post('/owner', verifyToken, ownerController.signUp);
 
 router.get('/owner/:id', verifyToken, ownerController.getOwner);
 
+router.get('/owner', verifyToken, ownerController.getAllOwners);
+
 
 router.put('/owner/:id', verifyToken, ownerController.updateOwner);
 

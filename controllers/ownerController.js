@@ -105,6 +105,40 @@ const driverController = {
             }
         }
     ,
+    
+    getAllOwners:
+        async (req, res, next) => {
+            if (req.user.role == "admin") {
+            
+                OwnerModel.findAll((err, doc) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    else if (!doc || doc.length == 0) {
+                        return res.status(404).json({
+                            "error": true,
+                            "message": "No records found",
+                            "data": null
+                        });
+                    }
+                    else {
+                        return res.status(200).json({
+                            "error": false,
+                            "message": "Accounts successfully retrieved",
+                            "data": doc
+                        });
+                    }
+                });
+            }
+            else {
+                return res.status(403).json({
+                    "error": true,
+                    "message": "Forbidden",
+                    "data": null
+                });
+            }
+        }
+    ,
 
     //PATCH REQUESTS
     //admin update requests

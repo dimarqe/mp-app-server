@@ -36,7 +36,7 @@ class Driver {
     }
 
     static findAll(result) {
-        pool.query("select * from driver", (err, doc) => {
+        pool.query("select * from driver order by driver_id asc", (err, doc) => {
             if (err) {
                 result(err, null);
             }

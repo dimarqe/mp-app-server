@@ -32,6 +32,17 @@ class Owner {
         });
     }
 
+    static findAll(result) {
+        pool.query("select * from vehicle_owner order by owner_id asc;", (err, doc) => {
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc.rows);
+            }
+        });
+    }
+
     static updateOwner(owner, result) {
         pool.query("update vehicle_owner set first_name = $1, last_name = $2, email_address = $3, phone_number = $4 where owner_id = $5",
             [owner.firstName, owner.lastName, owner.emailAddress, owner.phoneNumber, owner.ownerID], (err, doc) => {

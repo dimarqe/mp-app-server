@@ -127,7 +127,7 @@ const driverController = {
                     else if (!doc || doc.length == 0) {
                         return res.status(404).json({
                             "error": true,
-                            "message": "Account not found",
+                            "message": "No records found",
                             "data": null
                         });
                     }
@@ -138,7 +138,7 @@ const driverController = {
 
                         return res.status(200).json({
                             "error": false,
-                            "message": "Account successfully retrieved",
+                            "message": "Accounts successfully retrieved",
                             "data": doc
                         });
                     }
