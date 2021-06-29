@@ -8,20 +8,20 @@ const appointmentController = require('../controllers/appointmentController');
 router.post('/appointment', verifyToken, appointmentController.createAppointment);
 
 
-// router.get('/vehicle/:id', verifyToken, vehicleController.getVehicleByID);
+router.get('/appointment/:id', verifyToken, appointmentController.getAppointmentByID);
 
-// router.get('/vehicle/license-plate/:id', verifyToken, vehicleController.getVehicleByLicensePlate);
+router.get('/appointment/student/:id', verifyToken, appointmentController.getAppointmentByStudentID);
 
-// router.get('/vehicle/driver-id/:id', verifyToken, vehicleController.getVehicleByDriverID);
-
-// router.get('/vehicle/owner-id/:id', verifyToken, vehicleController.getVehicleByOwnerID);
-
-// router.get('/vehicle', verifyToken, vehicleController.getAllVehicles);
+router.get('/appointment/driver/:id', verifyToken, appointmentController.getAppointmentByDriverID);
 
 
-// router.put('/vehicle/:id', verifyToken, vehicleController.updateVehicle);
+router.put('/appointment/schedule/:id', verifyToken, appointmentController.updateAppointmentSchedule);
+
+router.put('/appointment/origin/:id', verifyToken, appointmentController.updateAppointmentOrigin);
+
+router.put('/appointment/destination/:id', verifyToken, appointmentController.updateAppointmentDestination);
 
 
-// router.delete('/vehicle/:id', verifyToken, adminController.validate, vehicleController.deleteVehicle);
+router.delete('/appointment/:id', verifyToken, appointmentController.deleteAppointment);
 
 module.exports = router;

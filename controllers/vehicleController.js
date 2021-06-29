@@ -48,7 +48,7 @@ const vehicleController = {
                             "error": false,
                             "message": "Vehicle record successfully created",
                             "data": {
-                                "vehicle_id":doc.vehicle_id
+                                "vehicle_id": doc.vehicle_id
                             }
                         });
                     }
@@ -164,7 +164,7 @@ const vehicleController = {
                 else if (!doc || doc.length == 0) {
                     return res.status(404).json({
                         "error": true,
-                        "message": "No vehicles found for driver "+req.params.id,
+                        "message": "No vehicles found for driver " + req.params.id,
                         "data": null
                     });
                 }
@@ -181,39 +181,49 @@ const vehicleController = {
 
     getVehicleByOwnerID:
         async (req, res, next) => {
-            //Validates data sent in request body
-            await param('id', 'Invalid ID, must be integer').isInt().trim().escape().run(req);
 
-            const reqErrors = validationResult(req);
+            if (req.user.role == "admin") {
+                //Validates data sent in request body
+                await param('id', 'Invalid ID, must be integer').isInt().trim().escape().run(req);
 
-            //returns error information if invalid data contained in request body
-            if (!reqErrors.isEmpty()) {
-                return res.status(400).json({
-                    "error": true,
-                    "message": reqErrors.array(),
-                    "data": null
-                });
-            }
+                const reqErrors = validationResult(req);
 
-            VehicleModel.findByOwnerID(req.params.id, (err, doc) => {
-                if (err) {
-                    return next(err);
-                }
-                else if (!doc || doc.length == 0) {
-                    return res.status(404).json({
+                //returns error information if invalid data contained in request body
+                if (!reqErrors.isEmpty()) {
+                    return res.status(400).json({
                         "error": true,
-                        "message": "No vehicles found for owner "+req.params.id,
+                        "message": reqErrors.array(),
                         "data": null
                     });
                 }
-                else {
-                    return res.status(200).json({
-                        "error": false,
-                        "message": "Records successfully retrieved",
-                        "data": doc
-                    });
-                }
-            });
+
+                VehicleModel.findByOwnerID(req.params.id, (err, doc) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    else if (!doc || doc.length == 0) {
+                        return res.status(404).json({
+                            "error": true,
+                            "message": "No vehicles found for owner " + req.params.id,
+                            "data": null
+                        });
+                    }
+                    else {
+                        return res.status(200).json({
+                            "error": false,
+                            "message": "Records successfully retrieved",
+                            "data": doc
+                        });
+                    }
+                });
+            }
+            else {
+                return res.status(403).json({
+                    "error": true,
+                    "message": "Forbidden",
+                    "data": null
+                });
+            }
         }
     ,
 

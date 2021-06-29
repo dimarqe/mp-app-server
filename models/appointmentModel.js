@@ -34,7 +34,7 @@ class Appointment {
     }
 
     static findByStudentID(studentID, result) {
-        pool.query("select * from appointment where student_id = $1", [studentID], (err, doc) => {
+        pool.query("select * from appointment where student_id = $1 order by appointment_schedule", [studentID], (err, doc) => {
             if (err) {
                 result(err, null);
             }
@@ -45,7 +45,7 @@ class Appointment {
     }
 
     static findByDriverID(driverID, result) {
-        pool.query("select * from appointment where driver_id = $1", [driverID], (err, doc) => {
+        pool.query("select * from appointment where driver_id = $1 order by appointment_schedule", [driverID], (err, doc) => {
             if (err) {
                 result(err, null);
             }
