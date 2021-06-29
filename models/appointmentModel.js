@@ -11,13 +11,13 @@ class Appointment {
     }
 
     static save(appointment, result) {
-        pool.query("insert into appointment (schedule, origin, destination, student_id) values ($1, $2, $3, $4)",
+        pool.query("insert into appointment (appointment_schedule, origin, destination, student_id) values ($1, $2, $3, $4) returning appointment_id",
             [appointment.schedule, appointment.origin, appointment.destination, appointment.studentID], (err, doc) => {
                 if (err) {
                     result(err, null);
                 }
                 else {
-                    result(null, doc);
+                    result(null, doc.rows[0]);
                 }
             });
     }

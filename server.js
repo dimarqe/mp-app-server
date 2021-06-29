@@ -8,6 +8,7 @@ const studentRoute = require('./routes/studentRoute');
 const driverRoute = require('./routes/driverRoute');
 const ownerRoute = require('./routes/ownerRoute');
 const vehicleRoute = require('./routes/vehicleRoute');
+const appointmentRoute = require('./routes/appointmentRoute');
 
 //App and port initialization
 const app = express();
@@ -23,6 +24,7 @@ app.use(studentRoute);
 app.use(driverRoute);
 app.use(ownerRoute);
 app.use(vehicleRoute);
+app.use(appointmentRoute);
 
 
 //Base url connection route
