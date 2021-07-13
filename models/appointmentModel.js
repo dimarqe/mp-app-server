@@ -34,7 +34,7 @@ class Appointment {
     }
 
     static findByStudentID(studentID, result) {
-        pool.query("select * from appointment where student_id = $1 order by appointment_schedule", [studentID], (err, doc) => {
+        pool.query("select * from appointment where student_id = $1 order by appointment_schedule asc", [studentID], (err, doc) => {
             if (err) {
                 result(err, null);
             }
@@ -45,7 +45,18 @@ class Appointment {
     }
 
     static findByDriverID(driverID, result) {
-        pool.query("select * from appointment where driver_id = $1 order by appointment_schedule", [driverID], (err, doc) => {
+        pool.query("select * from appointment where driver_id = $1 order by appointment_schedule asc", [driverID], (err, doc) => {
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc.rows);
+            }
+        });
+    }
+
+    static findAvailableAppointments(result){
+        pool.query("select * from appointment where driver_id is null order by appointment_schedule asc", (err, doc) => {
             if (err) {
                 result(err, null);
             }
@@ -91,7 +102,7 @@ class Appointment {
             });
     }
 
-    static updateDriver(driverID, appointmentID, result) {
+    static addDriver(driverID, appointmentID, result) {
         pool.query("update appointment set driver_id = $1 where appointment_id = $2",
             [driverID, appointmentID], (err, doc) => {
                 if (err) {
@@ -101,6 +112,18 @@ class Appointment {
                     result(null, doc);
                 }
             });
+    }
+
+    static removeDriver(appointmentID, result) {
+        pool.query("update appointment set driver_id = null where appointment_id = $1", 
+        [appointmentID], (err, doc) => {
+            if (err) {
+                result(err, null);
+            }
+            else {
+                result(null, doc);
+            }
+        });
     }
 
     static delete(appointmentID, studentID, result) {
