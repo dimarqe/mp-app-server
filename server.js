@@ -11,6 +11,7 @@ const vehicleRoute = require('./routes/vehicleRoute');
 const appointmentRoute = require('./routes/appointmentRoute');
 const routeRoute = require('./routes/routeRoute');
 const contractRoute = require('./routes/contractRoute');
+const paymentRoute = require('./routes/paymentRoute');
 
 //App and port initialization
 const app = express();
@@ -29,7 +30,7 @@ app.use(vehicleRoute);
 app.use(appointmentRoute);
 app.use(routeRoute);
 app.use(contractRoute);
-
+app.use(paymentRoute);
 
 
 //Base url connection route

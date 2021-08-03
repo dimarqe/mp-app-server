@@ -13,7 +13,7 @@ const contractContract = {
                 await body('contractNumber', 'Invalid contract number, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
                 await body('prNumber', 'Invalid pr number, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
                 await body('procurementOfficer', 'Invalid procurement officer name, 100 character limit').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
-                await body('contractor', 'Invalid contractor description, 255 character limit').isLength({ min: 1 }, { max: 255 }).trim().escape().run(req);
+                await body('contractor', 'Invalid contractor description, 255 character limit').isLength({ min: 0 }, { max: 255 }).trim().escape().run(req);
                 await body('issueDate', 'Invalid issue date').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
                 await body('expirationDate', 'Invalid expiration date').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
                 await body('dueDate', 'Invalid balance due date').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
@@ -163,7 +163,7 @@ const contractContract = {
                 await body('contractNumber', 'Invalid contract number, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
                 await body('prNumber', 'Invalid pr number, 30 character limit').isLength({ min: 1 }, { max: 30 }).trim().escape().run(req);
                 await body('procurementOfficer', 'Invalid procurement officer name, 100 character limit').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
-                await body('contractor', 'Invalid contractor description, 255 character limit').isLength({ min: 1 }, { max: 255 }).trim().escape().run(req);
+                await body('contractor', 'Invalid contractor description, 255 character limit').isLength({ min: 0 }, { max: 255 }).trim().escape().run(req);
                 await body('issueDate', 'Invalid issue date').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
                 await body('expirationDate', 'Invalid expiration date').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
                 await body('dueDate', 'Invalid balance due date').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
