@@ -144,7 +144,7 @@ const routeController = {
                 //Validates data sent in request body
                 await param('id', 'Invalid ID#, must be integer').isInt().trim().escape().run(req);
                 await body('description', 'Invalid description, 100 character limit').isLength({ min: 1 }, { max: 100 }).trim().escape().run(req);
-                await body('fee', 'Invalid fee, must contain decimals').isNumeric().trim().escape().run(req);
+                await body('fee', 'Invalid fee, must be in 1.00 - 1,000,000.00 range').isFloat({min:1 , max:1000000}).trim().escape().run(req);
                 
                 const reqErrors = validationResult(req);
 

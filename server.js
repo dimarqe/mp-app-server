@@ -10,6 +10,7 @@ const ownerRoute = require('./routes/ownerRoute');
 const vehicleRoute = require('./routes/vehicleRoute');
 const appointmentRoute = require('./routes/appointmentRoute');
 const routeRoute = require('./routes/routeRoute');
+const contractRoute = require('./routes/contractRoute');
 
 //App and port initialization
 const app = express();
@@ -27,6 +28,7 @@ app.use(ownerRoute);
 app.use(vehicleRoute);
 app.use(appointmentRoute);
 app.use(routeRoute);
+app.use(contractRoute);
 
 
 

@@ -1,26 +1,8 @@
 const pool = require('../config/dbConnection');
 
-/*
-contract_number varchar(30) not null,
-	pr_number varchar(30) not null,
-	procurement_officer varchar(60) not null,
-	contractor varchar(255),
-	issue_date date not null,
-	expiration_date date not null,
-	balance numeric(9, 2) not null,
-	due_date date not null,
-	route_id int not null,
-	vehicle_id int not null,
-	owner_id int not null,
-	
-	foreign key (route_id) references route,
-	foreign key (vehicle_id) references vehicle,
-	foreign key (owner_id) references vehicle_owner,
-	
-	primary key (owner_id, vehicle_id)
-*/
 class Contract {
     constructor(contract) {
+        this.contractID = contract.contractID
         this.contractNumber = contract.contractNumber;
         this.prNumber = contract.prNumber;
         this.procurementOfficer = contract.procurementOfficer;
@@ -35,8 +17,10 @@ class Contract {
     }
 
     static save(contract, result) {
-        pool.query("insert into contract (description, fee) values ($1, $2) returning contract_id",
-            [contract.description, contract.fee], (err, doc) => {
+        pool.query("insert into contract (contract_number, pr_number, procurement_officer, contractor, issue_date, expiration_date, due_date, route_id, owner_id, vehicle_id) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning contract_id",
+            [contract.contractNumber, contract.prNumber, contract.procurementOfficer, 
+                contract.contractor, contract.issueDate, contract.expirationDate, 
+                contract.dueDate, contract.routeID, contract.ownerID, contract.vehicleID], (err, doc) => {
                 if (err) {
                     result(err, null);
                 }
@@ -69,8 +53,22 @@ class Contract {
     }
 
     static updateContract(contract, result) {
-        pool.query("update contract set description = $1, fee = $2 where contract_id = $3",
-            [contract.description, contract.fee, contract.contractID], (err, doc) => {
+        pool.query("update contract set contract_number = $1, pr_number = $2, procurement_officer = $3, contractor = $4, issue_date = $5, expiration_date = $6, due_date = $7, route_id = $8, owner_id = $9, vehicle_id = $10 where contract_id = $11",
+        [contract.contractNumber, contract.prNumber, contract.procurementOfficer, 
+            contract.contractor, contract.issueDate, contract.expirationDate, 
+            contract.dueDate, contract.routeID, contract.ownerID, contract.vehicleID, contract.contractID], (err, doc) => {
+                if (err) {
+                    result(err, null);
+                }
+                else {
+                    result(null, doc);
+                }
+            });
+    }
+
+    static updateDueDate(contractID, dueDate, result) {
+        pool.query("update contract set due_date = $1 where contract_id = $2",
+        [dueDate, contractID], (err, doc) => {
                 if (err) {
                     result(err, null);
                 }
