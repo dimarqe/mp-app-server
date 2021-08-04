@@ -26,7 +26,8 @@
     "express-validator": "^6.9.2",
     "generate-password": "^1.6.0",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.6.0"
+    "pg": "^8.6.0",
+    "ws": "^8.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

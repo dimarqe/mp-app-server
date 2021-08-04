@@ -3,6 +3,11 @@ const dotenv = require('dotenv').config({ path: './config/.env' });
 const express = require('express');
 const cors = require('cors');
 
+const jwt = require('jsonwebtoken');
+
+const http = require('http');
+const webSocket = require('ws');
+
 //Route imports
 const studentRoute = require('./routes/studentRoute');
 const driverRoute = require('./routes/driverRoute');
@@ -19,7 +24,7 @@ const port = process.env.PORT || 3000;
 
 //express request body parser middleware
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 
@@ -36,7 +41,7 @@ app.use(paymentRoute);
 //Base url connection route
 app.get('/', (req, res, next) => {
     return res.status(200).json({
-        "error":false,
+        "error": false,
         "message": "...Welcome",
         "data": null
     });
@@ -45,7 +50,7 @@ app.get('/', (req, res, next) => {
 //middleware that catches and returns an error for all undefined routes
 app.use('*', (req, res, next) => {
     return res.status(404).json({
-        "error":true,
+        "error": true,
         "message": "Undefined route",
         "data": null
     });
@@ -64,8 +69,43 @@ app.use((err, req, res, next) => {
     }
 });
 
-app.listen(port, () => {
-    console.log("Just touch down on " + port);
+//websocket setup
+const server = http.createServer(app);
+
+const webSocketServer = new webSocket.Server({ server: server, autoAcceptConnections: false });
+
+
+webSocketServer.on('connection', (ws, req) => {
+    var token = req.url.split('token=').pop();
+    var user;
+
+    try {
+        user = jwt.verify(token, process.env.ACCESS_TOKEN);
+    }
+    catch (err) {
+        console.log('closed connection');
+        ws.close();
+    }
+
+    ws.on('message', function incoming(message) {
+        webSocketServer.clients.forEach(function each(client) {
+            if (client.readyState === webSocket.OPEN) {
+                console.log("id:" + user.id + ",location:" + message);
+                client.send("id:" + user.id + ",location:" + message);
+            }
+        });
+    });
+
+    ws.send('Connected');
 });
+
+//start our server
+server.listen(port, () => {
+    console.log('Server started on port ' + port);
+});
+
+// app.listen(port, () => {
+//     console.log("Just touch down on " + port);
+// });
 
 
