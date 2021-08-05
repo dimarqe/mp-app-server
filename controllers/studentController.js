@@ -359,13 +359,11 @@ const studentController = {
                     });
                 }
 
-                if (!req.body.password.isEmpty()) {
-                    try {
-                        //hashes password new password sent in request body
-                        var passwordHash = await bcrypt.hash(req.body.password, 10);
-                    } catch (error) {
-                        return next(error);
-                    }
+                try {
+                    //hashes password new password sent in request body
+                    var passwordHash = await bcrypt.hash(req.body.password, 10);
+                } catch (error) {
+                    return next(error);
                 }
 
                 const newStudent = new StudentModel({

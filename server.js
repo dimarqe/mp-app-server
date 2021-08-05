@@ -25,6 +25,8 @@ const port = process.env.PORT || 3000;
 //express request body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//enable cors for all routes
 app.use(cors());
 
 
